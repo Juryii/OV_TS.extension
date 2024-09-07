@@ -1,2 +1,2 @@
-# OV_TS.extension
-расширение для revit  ОВ и ТС с использованием pyrevit
+# pyRevit TS extension
+расширение для revit тепловых сетей с использованием pyrevit

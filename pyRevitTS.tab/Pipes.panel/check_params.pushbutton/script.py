@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+
 __title__ = "check params"                           # Name of the button displayed in Revit UI
 __doc__ = """Version = 1.0
 Date    = 07.09.2024
@@ -19,14 +20,6 @@ To-Do:
 _____________________________________________________________________
 Author: Yura Polyanskii"""                                           # Button Description shown in Revit UI
 
-# EXTRA: You can remove them.
-__author__ = "Yura Polyanskii"                                       # Script's Author
-# __helpurl__ = "https://www.youtube.com/watch?v=YhL_iOKH-1M"     # Link that can be opened with F1 when hovered over the tool in Revit UI.
-# __highlight__ = "new"                                           # Button will have an orange dot + Description in Revit UI
-# __min_revit_ver__ = 2019                                        # Limit your Scripts to certain Revit versions if it's not compatible due to RevitAPI Changes.
-# __max_revit_ver = 2022                                          # Limit your Scripts to certain Revit versions if it's not compatible due to RevitAPI Changes.
-# __context__     = ['Walls', 'Floors', 'Roofs']                # Make your button available only when certain categories are selected. Or Revit/View Types.
-
 # ╦╔╦╗╔═╗╔═╗╦═╗╔╦╗╔═╗
 # ║║║║╠═╝║ ║╠╦╝ ║ ╚═╗
 # ╩╩ ╩╩  ╚═╝╩╚═ ╩ ╚═╝ ⬇️ IMPORTS
@@ -40,9 +33,7 @@ from Autodesk.Revit.DB import Transaction, FilteredElementCollector     # or Imp
 from pyrevit import revit, forms                                        # import pyRevit modules. (Lots of useful features)
 
 # Custom Imports
-# from pyRevitTs.my_utils import get_pipes
-# from Snippets._selection import get_selected_elements                   # lib import
-# from Snippets._convert import convert_internal_to_m                     # lib import
+from pyRevitTS.my_utils import *                                        # lib import
 
 # .NET Imports
 import clr                                  # Common Language Runtime. Makes .NET libraries accessinble
@@ -84,7 +75,16 @@ PATH_SCRIPT = os.path.dirname(__file__)     # Absolute path to the folder where 
 if __name__ == '__main__':
 
     # START CODE HERE
-    print("hello world")
+    pipes = get_pipes()
+    pipe_d = get_param_value("Размер", pipes[0])
+    print(pipe_d["param_value"])
+    print(pipe_d["param_type"])
+
+    # pipe_l = get_param_value("Длина", pipes[0])
+
+    # pipe_dn = get_param_value("Внешний диаметр", pipes[0])
+    # pipe_project = get_param_value("Код проекта", pipes[0])
+
     # Use Transaction for Changes.
     # t = Transaction(doc,__title__)  # Transactions are context-like objects that guard any changes made to a Revit model.
     # AVOID  placing Transaction inside of your loops! It will drastically reduce perfomance of your script.

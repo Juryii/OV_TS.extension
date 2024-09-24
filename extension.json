@@ -1,7 +1,14 @@
 {
+    "builtin": "False",
+    "default_enabled": "True",
+    "type": "extension",
     "name": "TS extension",
-    "author": "Yura Polyanskii",
     "description": "Расширение для тепловых сетей в revit",
+    "author": "Yura Polyanskii",
+    "author_profile": "https://github.com/Juryii",
+    "url": "https://github.com/Juryii/pyRevitTS.git",
+    "website": "https://github.com/Juryii",
+    "image": "",
+    "dependencies": [],
     "version": "0.0.1"
-  }
-  
+}

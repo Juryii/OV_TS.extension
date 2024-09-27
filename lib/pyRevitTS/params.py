@@ -2,7 +2,8 @@
 
 from Autodesk.Revit.DB import *
 
-doc   = __revit__.ActiveUIDocument.Document 
+# noinspection PyUnresolvedReferences
+doc = __revit__.ActiveUIDocument.Document
 
 
 def add_shared_parameter(doc, param_name, param_group, category, param_type):

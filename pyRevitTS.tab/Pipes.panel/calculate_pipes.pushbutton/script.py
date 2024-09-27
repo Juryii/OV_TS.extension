@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-__title__ = "Calculate pipes"                           # Name of the button displayed in Revit UI
+__title__ = "Calculate pipes"  # Name of the button displayed in Revit UI
 __doc__ = """Version = 1.0
 Date    = 07.09.2024
 _____________________________________________________________________
@@ -18,7 +18,7 @@ _____________________________________________________________________
 To-Do:
 - 
 _____________________________________________________________________
-Author: Yura Polyanskii"""                                           # Button Description shown in Revit UI
+Author: Yura Polyanskii"""  # Button Description shown in Revit UI
 
 # ╦╔╦╗╔═╗╔═╗╦═╗╔╦╗╔═╗
 # ║║║║╠═╝║ ║╠╦╝ ║ ╚═╗
@@ -34,17 +34,21 @@ import clr  # Common Language Runtime. Makes .NET libraries accessible
 from pyRevitTS.my_utils import *  # lib import
 
 # pyRevit
-clr.AddReference("System")                  # Reference System.dll for import.
+clr.AddReference("System")  # Reference System.dll for import.
 # List_example = List[ElementId]()          # use .Add() instead of append or put python list of ElementIds in parenthesis.
 
 # ╦  ╦╔═╗╦═╗╦╔═╗╔╗ ╦  ╔═╗╔═╗
 # ╚╗╔╝╠═╣╠╦╝║╠═╣╠╩╗║  ║╣ ╚═╗
 #  ╚╝ ╩ ╩╩╚═╩╩ ╩╚═╝╩═╝╚═╝╚═╝ 📦 VARIABLES
 # ==================================================
-doc   = __revit__.ActiveUIDocument.Document   # Document   class from RevitAPI that represents project. Used to Create, Delete, Modify and Query elements from the project.
-uidoc = __revit__.ActiveUIDocument          # UIDocument class from RevitAPI that represents Revit project opened in the Revit UI.
-app   = __revit__.Application                 # Represents the Autodesk Revit Application, providing access to documents, options and other application wide data and settings.
-PATH_SCRIPT = os.path.dirname(__file__)     # Absolute path to the folder where script is placed.
+# noinspection PyUnresolvedReferences
+doc = __revit__.ActiveUIDocument.Document  # Document   class from RevitAPI that represents project. Used to Create, Delete, Modify and Query elements from the project.
+# noinspection PyUnresolvedReferences
+uidoc = __revit__.ActiveUIDocument  # UIDocument class from RevitAPI that represents Revit project opened in the Revit UI.
+# noinspection PyUnresolvedReferences
+app = __revit__.Application  # Represents the Autodesk Revit Application, providing access to documents, options and other application wide data and settings.
+PATH_SCRIPT = os.path.dirname(__file__)  # Absolute path to the folder where script is placed.
+
 
 # GLOBAL VARIABLES
 
@@ -56,34 +60,36 @@ PATH_SCRIPT = os.path.dirname(__file__)     # Absolute path to the folder where 
 # ==================================================
 def group_pipes(pipes):
     grouped_pipes = {}
-    
+
     for pipe in pipes:
         diameter = str(int(get_param_value("Диаметр", pipe)["param_value"]))
-        
+
         length = round(float(get_param_value("Длина", pipe)["param_value"]), 3)
         # length = round(length, 3)
         group_name = "DN" + diameter
-        
+
         if group_name not in grouped_pipes:
             # Инициализируем новый список, если ключа нет
             grouped_pipes[group_name] = []
-        
+
         # Добавляем значение длины в список
         grouped_pipes[group_name].append(length)
-    
+
     return grouped_pipes
+
 
 def calc_pipe_length(pipe_dict):
     pipe_lengths = {}
-    
+
     for key in pipe_dict.keys():
         total_length = 0
         for length in pipe_dict[key]:
             total_length += length  # Суммируем длины труб
-        
+
         pipe_lengths[key] = total_length  # Записываем общую длину для диаметра
-    
+
     return pipe_lengths
+
 
 # - Place local functions here. If you might use any functions in other scripts, consider placing it in the lib folder.
 
@@ -99,7 +105,6 @@ def calc_pipe_length(pipe_dict):
 # ╩ ╩╩ ╩╩╝╚╝ 🎯 MAIN
 # ==================================================
 if __name__ == '__main__':
-
     # START CODE HERE
     pipes = get_pipes()
     new_pipes = group_pipes(pipes)
@@ -112,14 +117,9 @@ if __name__ == '__main__':
 
     # pipe_l = get_param_value("Длина", pipes[0])
 
-
-
-    
-
     # pipe_dn = get_param_value("Внешний диаметр", pipes[0])
     # pipe_project = get_param_value("Код проекта", pipes[0])
 
-    
     # for pipe in pipes:
     #     print(pipe.Name)
     #     print(pipe.Parameters)
@@ -133,10 +133,8 @@ if __name__ == '__main__':
     #         param_value = "No value"
     #     print("Параметр {0} - значение: {1}".format(param_name, param_value))
 
-    
     # print("hello world")
     # get_pipes()
-
 
     # Use Transaction for Changes.
     # t = Transaction(doc,__title__)  # Transactions are context-like objects that guard any changes made to a Revit model.
@@ -145,10 +143,9 @@ if __name__ == '__main__':
     # You need to use t.Start() and t.Commit() to make changes to a Project.
     # t.Start()  # <- Transaction Start
 
-    #- CHANGES TO REVIT PROJECT HERE
+    # - CHANGES TO REVIT PROJECT HERE
 
     # t.Commit()  # <- Transaction End
-
 
     # Notify user that script is complete.
     print('-' * 50)

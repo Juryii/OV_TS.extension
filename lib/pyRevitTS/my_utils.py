@@ -2,11 +2,13 @@
 
 from Autodesk.Revit.DB import FilteredElementCollector, BuiltInCategory, StorageType, UnitUtils, UnitTypeId, DisplayUnit
 
-doc   = __revit__.ActiveUIDocument.Document 
+# noinspection PyUnresolvedReferences
+doc = __revit__.ActiveUIDocument.Document
 
 
 def get_pipes():
-    pipes = FilteredElementCollector(doc).OfCategory(BuiltInCategory.OST_PipeCurves).WhereElementIsNotElementType().ToElements()
+    pipes = FilteredElementCollector(doc).OfCategory(
+        BuiltInCategory.OST_PipeCurves).WhereElementIsNotElementType().ToElements()
     return pipes
 
 
@@ -15,7 +17,7 @@ def get_param_value(param_name, element):
     Получение значение параметра у элемента
     """
     params = [param.Definition.Name for param in element.Parameters]
-    
+
     if param_name not in params:
         # print("Параметр '{}' отсутствует у данного элемента".format(param_name))
         return None
@@ -50,12 +52,13 @@ def get_param_value(param_name, element):
                         param_value = "Неизвестный тип значения"
                         param_type = None
                     # print("Параметр '{}' имеет значение {} Тип {}".format(param_name, param_value, param_type))
-                    return {"param_value": param_value, "param_type" : param_type}
+                    return {"param_value": param_value, "param_type": param_type}
                 else:
                     # print("Параметр '{}' не имеет значения".format(param_name))
                     param_value = None
                     param_type = None
-                    return {"param_value": param_value, "param_type" : param_type}
+                    return {"param_value": param_value, "param_type": param_type}
+
 
 def convert_to_mm(value, unit_type_id):
     if unit_type_id == UnitTypeId.Feet:
@@ -68,5 +71,3 @@ def convert_to_mm(value, unit_type_id):
         return value
     else:
         raise ValueError("Неизвестный тип единиц измерения: {}".format(unit_type_id))
-
-

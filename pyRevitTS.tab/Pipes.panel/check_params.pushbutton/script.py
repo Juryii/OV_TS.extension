@@ -29,7 +29,7 @@ import os  # Regular Imports
 import re
 
 # .NET Imports
-import clr  # Common Language Runtime. Makes .NET libraries accessinble
+import clr  # Common Language Runtime. Makes .NET libraries accessible
 from Autodesk.Revit.DB import *  # Import everything from DB (Very good for beginners)
 
 # Custom Imports
@@ -37,15 +37,19 @@ from pyRevitTS.my_utils import *  # lib import
 from pyRevitTS.params import add_shared_parameter
 
 # pyRevit
-clr.AddReference("System")                  # Refference System.dll for import.
-# List_example = List[ElementId]()          # use .Add() instead of append or put python list of ElementIds in parentesis.
+clr.AddReference("System")                  # Reference System.dll for import.
+# List_example = List[ElementId]()          # use .Add() instead of append or put python list of ElementIds in parentheses.
 
 # ╦  ╦╔═╗╦═╗╦╔═╗╔╗ ╦  ╔═╗╔═╗
 # ╚╗╔╝╠═╣╠╦╝║╠═╣╠╩╗║  ║╣ ╚═╗
 #  ╚╝ ╩ ╩╩╚═╩╩ ╩╚═╝╩═╝╚═╝╚═╝ 📦 VARIABLES
 # ==================================================
+# noinspection PyUnresolvedReferences
 doc   = __revit__.ActiveUIDocument.Document   # Document   class from RevitAPI that represents project. Used to Create, Delete, Modify and Query elements from the project.
+
+# noinspection PyUnresolvedReferences
 uidoc = __revit__.ActiveUIDocument          # UIDocument class from RevitAPI that represents Revit project opened in the Revit UI.
+# noinspection PyUnresolvedReferences
 app   = __revit__.Application                 # Represents the Autodesk Revit Application, providing access to documents, options and other application wide data and settings.
 PATH_SCRIPT = os.path.dirname(__file__)     # Absolute path to the folder where script is placed.
 
@@ -74,7 +78,7 @@ def extract_gost(text):
 # ╚═╝╩═╝╩ ╩╚═╝╚═╝╚═╝╚═╝ ⏹️ CLASSES
 # ==================================================
 
-# - Place local classes here. If you might use any classes in other scripts, consider placing it in the lib folder.
+# - Place local classes here. If you might use any classes in other scripts, consider placing it in the lib folder. ts_variables
 
 # ╔╦╗╔═╗╦╔╗╔
 # ║║║╠═╣║║║║

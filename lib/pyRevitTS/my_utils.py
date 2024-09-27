@@ -12,7 +12,7 @@ def get_pipes():
 
 def get_param_value(param_name, element):
     """
-    получение значение параметра у элемента
+    Получение значение параметра у элемента
     """
     params = [param.Definition.Name for param in element.Parameters]
     
@@ -22,10 +22,6 @@ def get_param_value(param_name, element):
     else:
         for param in element.Parameters:
             if param.Definition.Name == param_name:
-                # Инициализируем переменные
-                param_value = "Неизвестное значение"
-                param_type = "Неизвестный тип"
-
                 if param.HasValue:
                     if param.StorageType == StorageType.String:
                         param_value = param.AsString()

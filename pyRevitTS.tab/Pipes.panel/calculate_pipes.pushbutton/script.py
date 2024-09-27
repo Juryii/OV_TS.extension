@@ -25,21 +25,17 @@ Author: Yura Polyanskii"""                                           # Button De
 # ╩╩ ╩╩  ╚═╝╩╚═ ╩ ╚═╝ ⬇️ IMPORTS
 # ==================================================
 # Regular + Autodesk
-import os, sys, math, datetime, time                                    # Regular Imports
-from Autodesk.Revit.DB import *                                         # Import everything from DB (Very good for beginners)
-from Autodesk.Revit.DB import Transaction, FilteredElementCollector     # or Import only classes that are used.
-
-# pyRevit
-from pyrevit import revit, forms                                        # import pyRevit modules. (Lots of useful features)
-
-# Custom Imports
-from pyRevitTS.my_utils import *                                        # lib import
+import os  # Regular Imports
 
 # .NET Imports
-import clr                                  # Common Language Runtime. Makes .NET libraries accessinble
-clr.AddReference("System")                  # Refference System.dll for import.
-from System.Collections.Generic import List # List<ElementType>() <- it's special type of list from .NET framework that RevitAPI requires
-# List_example = List[ElementId]()          # use .Add() instead of append or put python list of ElementIds in parentesis.
+import clr  # Common Language Runtime. Makes .NET libraries accessible
+
+# Custom Imports
+from pyRevitTS.my_utils import *  # lib import
+
+# pyRevit
+clr.AddReference("System")                  # Reference System.dll for import.
+# List_example = List[ElementId]()          # use .Add() instead of append or put python list of ElementIds in parenthesis.
 
 # ╦  ╦╔═╗╦═╗╦╔═╗╔╗ ╦  ╔═╗╔═╗
 # ╚╗╔╝╠═╣╠╦╝║╠═╣╠╩╗║  ║╣ ╚═╗
@@ -144,7 +140,7 @@ if __name__ == '__main__':
 
     # Use Transaction for Changes.
     # t = Transaction(doc,__title__)  # Transactions are context-like objects that guard any changes made to a Revit model.
-    # AVOID  placing Transaction inside of your loops! It will drastically reduce perfomance of your script.
+    # AVOID  placing Transaction inside your loops! It will drastically reduce performance of your script.
 
     # You need to use t.Start() and t.Commit() to make changes to a Project.
     # t.Start()  # <- Transaction Start

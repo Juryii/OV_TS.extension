@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from Autodesk.Revit.DB import FilteredElementCollector, BuiltInCategory, StorageType, UnitUtils, UnitTypeId, DisplayUnit
+from Autodesk.Revit.DB import FilteredElementCollector, BuiltInCategory, StorageType, UnitTypeId
 
 # noinspection PyUnresolvedReferences
 doc = __revit__.ActiveUIDocument.Document
@@ -71,3 +71,30 @@ def convert_to_mm(value, unit_type_id):
         return value
     else:
         raise ValueError("Неизвестный тип единиц измерения: {}".format(unit_type_id))
+
+
+def translate_param_type(param_type, to_english=True):
+    """
+        Конвертирует тип параметра между русским и английским языком.
+
+        :param param_type: Тип параметра (на русском или английском).
+        :param to_english: Флаг, указывающий направление перевода (True - в английский, False - в русский).
+        :return: Переведенный тип параметра.
+        """
+
+    # Словарь для конвертации типов параметров
+    param_type_translation = {
+        "Текст": "Text",
+        "Целое число": "Integer",
+        "Целое": "Integer",
+        "Длина": "Length",
+        "Площадь": "Area",
+        "Объем": "Volume",
+        "Да/Нет": "YesNo",
+        # Добавьте другие необходимые типы параметров
+    }
+    if to_english:
+        return param_type_translation.get(param_type, param_type)
+    else:
+        reversed_translation = {v: k for k, v in param_type_translation.items()}
+        return reversed_translation.get(param_type, param_type)

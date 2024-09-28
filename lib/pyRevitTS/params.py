@@ -3,10 +3,20 @@
 from Autodesk.Revit.DB import *
 
 # noinspection PyUnresolvedReferences
-doc = __revit__.ActiveUIDocument.Document
+# doc = __revit__.ActiveUIDocument.Document
 
 
 def add_shared_parameter(doc, param_name, param_group, category, param_type):
+    """
+    Добавление общего параметра
+
+    Аргументы:
+    doc -- __revit__.ActiveUIDocument.Document
+    param_name -- наименование параметра, пример "Класс"
+    param_group -- группа параметров, прим "Идентификация"
+    category -- категория элементов для которых добавляется параметр, пример BuiltInCategory.OST_PipeCurves
+    param_type -- тип параметра, пример ParameterType.Text
+    """
     # Открываем Transaction (транзакцию)
     transaction = Transaction(doc, "Добавление общего параметра")
     transaction.Start()

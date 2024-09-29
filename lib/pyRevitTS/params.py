@@ -2,8 +2,7 @@
 
 from Autodesk.Revit.DB import *
 
-from pyRevitTS.my_utils import translate_param_type
-from ts_variables import list_identification
+from ts_variables import list_identification, parameter_type_mapping
 
 
 def get_params_of_fop(doc, param_group):
@@ -43,7 +42,7 @@ def get_params_of_fop(doc, param_group):
     return params
 
 
-def compare_parameters(doc, param_group):
+def compare_parameters(doc, param_group, list_params=list_identification):
     """
     Сравнивает параметры из файла общих параметров с параметрами,
     ожидаемыми в проекте, и возвращает список отсутствующих
@@ -51,6 +50,7 @@ def compare_parameters(doc, param_group):
 
     :param doc: Документ Revit, используемый для доступа к приложению.
     :param param_group: Название группы параметров для проверки.
+    :param list_params список параметров который нужно сравнить с параметрами в ФОП, по умолчанию список берется в list_identification
     :return: Словарь, содержащий два списка:
              - 'missing_params': параметры, отсутствующие в проекте.
              - 'type_mismatch_params': параметры с несовпадающим типом,
@@ -62,22 +62,24 @@ def compare_parameters(doc, param_group):
     # Преобразуем fop_params в словарь для быстрого поиска по имени
     fop_params_dict = {param['param_name']: param for param in fop_params}
 
-    missing_params = []
-    type_mismatch_params = []
+    missing_params = []  # Список отсутствующих параметров в ФОП
+    type_mismatch_params = []  # Список неверно указанных типов параметров в ФОП
 
     # Проверяем параметры из list_identification
-    for param in list_identification:
+    for param in list_params:
         param_name = param['param_name']
-        param_type_in_revit = translate_param_type(param['param_type_inRevit'], to_english=True)
+        # Получаем тип параметра из list_identification с типом ParameterType
+        param_type_in_revit = parameter_type_mapping.get(param['param_type_inRevit'])
 
         if param_name not in fop_params_dict:
             # Если параметр отсутствует в файле общих параметров
             missing_params.append(param)
         else:
-            # Преобразуем тип параметра из файла общих параметров в строку
-            actual_type = str(fop_params_dict[param_name]['param_type'])
-            # Приводим оба типа к нижнему регистру и удаляем пробелы для точного сравнения
-            if param_type_in_revit.strip().lower() != actual_type.strip().lower():
+            # Получаем тип параметра из файла общих параметров с типом ParameterType
+            actual_type = fop_params_dict[param_name]['param_type']
+
+            # Проверяем соответствие типа параметра из list_identification в ФОП
+            if param_type_in_revit != actual_type:
                 type_mismatch_params.append({
                     'param_name': param_name,
                     'expected_type': param_type_in_revit,
@@ -88,6 +90,7 @@ def compare_parameters(doc, param_group):
         'missing_params': missing_params,
         'type_mismatch_params': type_mismatch_params
     }
+
 
 def add_shared_parameter(doc, param_name, param_group, category, param_type):
     """

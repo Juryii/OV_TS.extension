@@ -1,4 +1,5 @@
 # coding=utf-8
+from Autodesk.Revit.DB import BuiltInCategory, ParameterType
 
 list_identification = [
     {
@@ -154,3 +155,16 @@ elements {
 }
 
 """
+
+parameter_type_mapping = {
+    "Текст": ParameterType.Text,
+    "Целое": ParameterType.Integer,
+    # Добавьте другие типы параметров
+}
+
+categories_mapping = {
+    "Трубы": BuiltInCategory.OST_PipeCurves,
+    "Соединительные детали трубопроводов": BuiltInCategory.OST_PipeFitting,
+    "Арматура трубопроводов": BuiltInCategory.OST_PipeAccessory,
+    # Добавьте другие соответствия
+}

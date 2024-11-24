@@ -1,75 +1,82 @@
 # -*- coding: utf-8 -*-
-__title__ = "settings"  # Name of the button displayed in Revit UI
-__doc__ = """Version = 0.1
-Date    = 07.10.2024
-_____________________________________________________________________
-Description:
-Изменение настроек в расширении
-_____________________________________________________________________
-How-to:
--> Click on the button
-
-_____________________________________________________________________
-To-Do:
-- 
-_____________________________________________________________________
-Author: Yuri Polyanskii"""  # Button Description shown in Revit UI
-# ╦╔╦╗╔═╗╔═╗╦═╗╔╦╗╔═╗
-# ║║║║╠═╝║ ║╠╦╝ ║ ╚═╗
-# ╩╩ ╩╩  ╚═╝╩╚═ ╩ ╚═╝ ⬇️ IMPORTS
-# ==================================================
-# Regular + Autodesk
-import os, sys, math, datetime, time                                    # Regular Imports
-from Autodesk.Revit.DB import *                                         # Import everything from DB (Very good for beginners)
-from Autodesk.Revit.DB import Transaction, FilteredElementCollector     # or Import only classes that are used.
-
-# pyRevit
-from pyrevit import revit, forms                                        # import pyRevit modules. (Lots of useful features)
-
-# Custom Imports
-# from Snippets._selection import get_selected_elements                   # lib import
+from Autodesk.Revit.DB import *
+from pyrevit import forms
+import wpf, os, clr
 
 # .NET Imports
-import clr                                  # Common Language Runtime. Makes .NET libraries accessinble
-clr.AddReference("System")                  # Refference System.dll for import.
-from System.Collections.Generic import List # List<ElementType>() <- it's special type of list from .NET framework that RevitAPI requires
+clr.AddReference("System")
+clr.AddReference("PresentationFramework")
+from System.Windows import Application, Window
+from System.Windows.Controls import UserControl
 
-# ╦  ╦╔═╗╦═╗╦╔═╗╔╗ ╦  ╔═╗╔═╗
-# ╚╗╔╝╠═╣╠╦╝║╠═╣╠╩╗║  ║╣ ╚═╗
-#  ╚╝ ╩ ╩╩╚═╩╩ ╩╚═╝╩═╝╚═╝╚═╝ 📦 VARIABLES
-# ==================================================
-doc   = __revit__.ActiveUIDocument.Document   # Document   class from RevitAPI that represents project. Used to Create, Delete, Modify and Query elements from the project.
-uidoc = __revit__.ActiveUIDocument          # UIDocument class from RevitAPI that represents Revit project opened in the Revit UI.
-app   = __revit__.Application                 # Represents the Autodesk Revit Application, providing access to documents, options and other application wide data and settings.
-PATH_SCRIPT = os.path.dirname(__file__)     # Absolute path to the folder where script is placed.
+from System.Windows.Media.Animation import DoubleAnimation
+from System import TimeSpan
+from System.Windows import Duration
+from System.Windows.UIElement import OpacityProperty
 
-# GLOBAL VARIABLES
 
-# - Place global variables here.
+PATH_SCRIPT = os.path.dirname(__file__)
 
-# ╔═╗╦ ╦╔╗╔╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
-# ╠╣ ║ ║║║║║   ║ ║║ ║║║║╚═╗
-# ╚  ╚═╝╝╚╝╚═╝ ╩ ╩╚═╝╝╚╝╚═╝ 🧬 FUNCTIONS
-# ==================================================
 
-# - Place local functions here. If you might use any functions in other scripts, consider placing it in the lib folder.
+# Первая страница как UserControl
+class MainPage(UserControl):
+    def __init__(self, parent_window):
+        wpf.LoadComponent(self, os.path.join(PATH_SCRIPT, 'main_page.xaml'))
+        self.parent_window = parent_window
 
-# ╔═╗╦  ╔═╗╔═╗╔═╗╔═╗╔═╗
-# ║  ║  ╠═╣╚═╗╚═╗║╣ ╚═╗
-# ╚═╝╩═╝╩ ╩╚═╝╚═╝╚═╝╚═╝ ⏹️ CLASSES
-# ==================================================
+        # Привязка обработчиков событий
+        self.testButton.Click += self.test_button_click
 
-# - Place local classes here. If you might use any classes in other scripts, consider placing it in the lib folder.
+    def test_button_click(self, sender, args):
+        """Переключение на вторую страницу"""
+        self.parent_window.navigate_to_page("second")
 
-# ╔╦╗╔═╗╦╔╗╔
-# ║║║╠═╣║║║║
-# ╩ ╩╩ ╩╩╝╚╝ 🎯 MAIN
-# ==================================================
+
+# Вторая страница как UserControl
+class SecondPage(UserControl):
+    def __init__(self, parent_window):
+        wpf.LoadComponent(self, os.path.join(PATH_SCRIPT, 'second_page.xaml'))
+        self.parent_window = parent_window
+
+        # Привязка обработчиков событий
+        self.homeButton.Click += self.home_button_click
+
+    def home_button_click(self, sender, args):
+        """Возврат на главную страницу"""
+        self.parent_window.navigate_to_page("main")
+
+
+# Главное окно приложения
+class MainWindow(Window):
+    def __init__(self):
+        wpf.LoadComponent(self, os.path.join(PATH_SCRIPT, 'main_window.xaml'))
+
+        # Инициализация страниц
+        self.pages = {
+            "main": MainPage(self),
+            "second": SecondPage(self)
+        }
+
+        # Установка начальной страницы
+        self.navigate_to_page("main")
+
+        # Показать окно
+        self.ShowDialog()
+
+    def navigate_to_page(self, page_name):
+        if page_name in self.pages:
+            # Создаем анимацию fade out
+            fade_out = DoubleAnimation(1, 0, Duration(TimeSpan.FromSeconds(0.2)))
+
+            # После завершения fade out меняем страницу и делаем fade in
+            def on_completed(s, e):
+                self.contentControl.Content = self.pages[page_name]
+                fade_in = DoubleAnimation(0, 1, Duration(TimeSpan.FromSeconds(0.2)))
+                self.contentControl.BeginAnimation(OpacityProperty, fade_in)
+
+            fade_out.Completed += on_completed
+            self.contentControl.BeginAnimation(OpacityProperty, fade_out)
+
+
 if __name__ == '__main__':
-
-    # START CODE HERE
-
-
-    # Notify user that script is complete.
-    print('-' * 50)
-    print('Hold ALT + Click on the button to open its source folder.')
+    main_window = MainWindow()
